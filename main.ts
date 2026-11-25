@@ -13,6 +13,14 @@ const MESSAGE =
 // The gate: entry.txt must be UTF-8 text of 1..260 characters, and the
 // message itself at most 200 characters, in exactly two parts joined by
 // a single newline, with no trailing newline and no explanation after it.
+// The To: line must name a role, a first name or a relationship — never a
+// real full name or a handle — so enforce a single token after "To: ".
+if (!/^To: [A-Za-z][A-Za-z'-]*$/.test(TO_LINE)) {
+  throw new Error(`To: line must name one first name or role, got: ${TO_LINE}`);
+}
+if (MESSAGE.includes("\n")) {
+  throw new Error("message must be a single line");
+}
 const entry = `${TO_LINE}\n${MESSAGE}`;
 
 if (entry.length < 1 || entry.length > 260) {
